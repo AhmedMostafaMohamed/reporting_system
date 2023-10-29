@@ -10,7 +10,7 @@ class ReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PlatformWebViewController _controller = PlatformWebViewController(
+    final PlatformWebViewController controller = PlatformWebViewController(
       const PlatformWebViewControllerCreationParams(),
     )..loadRequest(
         LoadRequestParams(
@@ -23,7 +23,7 @@ class ReportScreen extends StatelessWidget {
       ),
       body: PlatformWebViewWidget(
         PlatformWebViewWidgetCreationParams(
-          controller: _controller,
+          controller: controller,
         ),
       ).build(context),
     );

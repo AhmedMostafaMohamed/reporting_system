@@ -55,7 +55,6 @@ class AuthRepository extends BaseAuthRepository {
 
   @override
   EitherUser<User> googleSignInUser() async {
-    print('${_firebaseFirestore.collection('users')}');
     await _googleSignIn.signOut();
 
     if (kIsWeb) {
@@ -65,7 +64,7 @@ class AuthRepository extends BaseAuthRepository {
             await _auth.signInWithPopup(authProvider);
         if (userCredential.user != null) {
           bool? accessValue = await checkSystemAccess(
-              userCredential.user!.email!, 'Users management');
+              userCredential.user!.email!, 'Reporting system');
           if (accessValue == true) {
             return right(userCredential.user!);
           } else if (accessValue == false) {
@@ -97,7 +96,7 @@ class AuthRepository extends BaseAuthRepository {
               await _auth.signInWithCredential(authCredential);
           if (userCredential.user != null) {
             bool? accessValue = await checkSystemAccess(
-                userCredential.user!.email!, 'Users management');
+                userCredential.user!.email!, 'Reporting system');
 
             if (accessValue == true) {
               return right(userCredential.user!);

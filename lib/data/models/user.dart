@@ -24,6 +24,7 @@ class User extends Equatable {
       'POS': false,
       'Workers scheduler': false,
       'Users management': false,
+      'Reporting system': false,
     });
   }
 
@@ -72,7 +73,7 @@ class User extends Equatable {
     Map<String, bool>? systemAccess,
   }) {
     return User(
-      id: this.id,
+      id: id,
       email: email ?? this.email,
       role: role ?? this.role,
       systemAccess: systemAccess ?? Map.from(this.systemAccess),

@@ -8,14 +8,14 @@ import '../../../shared/components/confirm_dialog.dart';
 class ReportsList extends StatefulWidget {
   final List<Report> reports;
 
-  ReportsList({required this.reports});
+  const ReportsList({super.key, required this.reports});
 
   @override
   _ReportsListState createState() => _ReportsListState();
 }
 
 class _ReportsListState extends State<ReportsList> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<Report> _filteredReports = [];
 
   @override
@@ -42,7 +42,7 @@ class _ReportsListState extends State<ReportsList> {
           child: TextField(
             controller: _searchController,
             onChanged: _filterReports,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Search by Report Name',
               prefixIcon: Icon(Icons.search),
             ),

@@ -8,8 +8,6 @@ import 'package:reporting_system/data/repos/report/report_repository.dart';
 import 'package:reporting_system/domain/blocs/report/report_bloc.dart';
 import 'package:reporting_system/modules/home/home.dart';
 import 'package:reporting_system/modules/report%20screen/report_screen.dart';
-import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
-
 import 'data/repos/authentication/authentication_repository.dart';
 import 'domain/blocs/auth/auth_bloc.dart';
 import 'firebase_options.dart';
@@ -78,45 +76,6 @@ class MyApp extends StatelessWidget {
           }
           return null;
         },
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final PlatformWebViewController _controller = PlatformWebViewController(
-    const PlatformWebViewControllerCreationParams(),
-  )..loadRequest(
-      LoadRequestParams(
-        uri: Uri.parse(
-            'https://lookerstudio.google.com/embed/reporting/3e8aff48-3fe5-4365-845a-ded392a34a71/page/0slZD'),
-      ),
-    );
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: PlatformWebViewWidget(
-        PlatformWebViewWidgetCreationParams(
-          controller: _controller,
-        ),
-      ).build(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }

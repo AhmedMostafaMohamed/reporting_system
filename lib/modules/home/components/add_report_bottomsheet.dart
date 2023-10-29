@@ -27,7 +27,7 @@ class AddReportBottomSheet extends StatelessWidget {
                 }
                 return null;
               },
-              decoration: InputDecoration(labelText: 'Report Name'),
+              decoration: const InputDecoration(labelText: 'Report Name'),
             ),
             const SizedBox(height: 12.0),
             TextFormField(
@@ -42,9 +42,9 @@ class AddReportBottomSheet extends StatelessWidget {
                 }
                 return null;
               },
-              decoration: InputDecoration(labelText: 'Report URL'),
+              decoration: const InputDecoration(labelText: 'Report URL'),
             ),
-            SizedBox(height: 24.0),
+            const SizedBox(height: 24.0),
             ElevatedButton(
               onPressed: () {
                 if (formKey.currentState!.validate()) {
