@@ -10,27 +10,41 @@ import 'package:reporting_system/modules/home/home.dart';
 import 'package:reporting_system/modules/report%20screen/report_screen.dart';
 import 'data/repos/authentication/authentication_repository.dart';
 import 'domain/blocs/auth/auth_bloc.dart';
-import 'firebase_options.dart';
 import 'modules/auth/auth_page.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  String jsonString = await getConfigForFirebase();
+  Map configMap = json.decode(jsonString);
+  Map dataProjectConfig = configMap['data_firebase_config'];
+  Map authProjectConfig = configMap['auth_firebase_config'];
   await Firebase.initializeApp(
     name: 'data',
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: FirebaseOptions(
+        apiKey: dataProjectConfig['apiKey'],
+        authDomain: dataProjectConfig['authDomain'],
+        projectId: dataProjectConfig['projectId'],
+        storageBucket: dataProjectConfig['storageBucket'],
+        messagingSenderId: dataProjectConfig['messagingSenderId'],
+        appId: dataProjectConfig['appId']),
   );
   await Firebase.initializeApp(
     name: 'auth',
-    options: const FirebaseOptions(
-        apiKey: "AIzaSyCjuv-MXi7cPBjOAra9A5KCYkl7CZ5kfP0",
-        authDomain: "user-management-da458.firebaseapp.com",
-        projectId: "user-management-da458",
-        storageBucket: "user-management-da458.appspot.com",
-        messagingSenderId: "751277100021",
-        appId: "1:751277100021:web:0bb371fef2fd677a8faebc"),
+    options: FirebaseOptions(
+        apiKey: authProjectConfig['apiKey'],
+        authDomain: authProjectConfig['authDomain'],
+        projectId: authProjectConfig['projectId'],
+        storageBucket: authProjectConfig['storageBucket'],
+        messagingSenderId: authProjectConfig['messagingSenderId'],
+        appId: authProjectConfig['appId']),
   );
   runApp(const MyApp());
 }
+
+Future<String> getConfigForFirebase() async =>
+    await rootBundle.loadString('assets/config/firebase_config.json');
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
