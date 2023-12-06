@@ -44,7 +44,7 @@ void main() async {
 }
 
 Future<String> getConfigForFirebase() async =>
-    await rootBundle.loadString('assets/config/firebase_config.json');
+   await rootBundle.loadString('assets/config/firebase_config.json');
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
