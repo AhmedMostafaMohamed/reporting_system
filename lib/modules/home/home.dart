@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
           BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is Unauthenticated) {
-                Navigator.of(context).pushReplacementNamed('/');
+                Navigator.of(context).pushReplacementNamed('/auth');
               }
             },
             child: IconButton(

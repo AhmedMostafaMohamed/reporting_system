@@ -40,7 +40,25 @@ class AuthPage extends StatelessWidget {
         ),
       ],
       onLogin: (LoginData data) async {
-        return 'Email not found';
+        final userBloc = BlocProvider.of<AuthBloc>(context);
+        try {
+          // Dispatch the SignInUser event to the authentication Bloc
+          userBloc.add(EmailPasswordSignInEvent(
+              email: data.name, password: data.password));
+
+          await for (final state in userBloc.stream) {
+            if (state is UserErrorState) {
+              return state.errorMessage;
+            } else if (state is Authenticated) {
+              return null;
+            }
+          }
+        } catch (e) {
+          debugPrint('errors: $e');
+          return e.toString();
+        }
+
+        return null;
       },
       onRecoverPassword: (p0) {
         return null;

@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:reporting_system/data/models/user.dart' as model;
 import 'base_authentication_repository.dart';
 
 class AuthRepository extends BaseAuthRepository {
@@ -54,7 +55,7 @@ class AuthRepository extends BaseAuthRepository {
   }
 
   @override
-  EitherUser<User> googleSignInUser() async {
+  EitherUser<String> googleSignInUser() async {
     await _googleSignIn.signOut();
 
     if (kIsWeb) {
@@ -66,7 +67,7 @@ class AuthRepository extends BaseAuthRepository {
           bool? accessValue = await checkSystemAccess(
               userCredential.user!.email!, 'Reporting system');
           if (accessValue == true) {
-            return right(userCredential.user!);
+            return right('${userCredential.user!.email} logged in successfully');
           } else if (accessValue == false) {
             return left(
                 'the user: ${userCredential.user!.email!} does not have access for this system');
@@ -99,7 +100,7 @@ class AuthRepository extends BaseAuthRepository {
                 userCredential.user!.email!, 'Reporting system');
 
             if (accessValue == true) {
-              return right(userCredential.user!);
+              return right('${userCredential.user!.email} logged in successfully');
             } else if (accessValue == false) {
               return left(
                   'the user: ${userCredential.user!.email!} does not have access for this system');
@@ -128,5 +129,11 @@ class AuthRepository extends BaseAuthRepository {
       return left(
           kDebugMode ? e.toString() : 'error occurred, please try again later');
     }
+  }
+
+  @override
+  EitherUser<model.User> emailPasswordSignIn(String email, String password) {
+    // TODO: implement emailPasswordSignIn
+    throw UnimplementedError();
   }
 }

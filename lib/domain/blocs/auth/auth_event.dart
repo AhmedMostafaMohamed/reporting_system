@@ -8,5 +8,10 @@ abstract class AuthEvent extends Equatable {
 }
 
 class SignInEvent extends AuthEvent {}
+class EmailPasswordSignInEvent extends AuthEvent {
+  final String email;
+  final String password;
 
+  const EmailPasswordSignInEvent({required this.email, required this.password});
+}
 class SignOutEvent extends AuthEvent {}

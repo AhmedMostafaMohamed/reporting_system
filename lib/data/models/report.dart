@@ -40,6 +40,14 @@ class Report extends Equatable {
     );
   }
 
+  static Report fromJson(Map json) {
+    return Report(
+      name: json['name'],
+      reportUrl: json['reportUrl'],
+      id: json['_id'],
+    );
+  }
+
   @override
   List<Object?> get props => [
         id,

@@ -79,4 +79,11 @@ class User extends Equatable {
       systemAccess: systemAccess ?? Map.from(this.systemAccess),
     );
   }
+       static User fromJson(Map json) {
+    return User(
+        email: json['email'],
+        id: json['_id'],
+        role: json['role'] == 'admin' ? Role.admin : Role.user,
+        systemAccess: Map<String, bool>.from(json['systemAccess']));
+  }
 }
