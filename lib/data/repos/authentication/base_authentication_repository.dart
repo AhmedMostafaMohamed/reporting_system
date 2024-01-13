@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:reporting_system/data/models/user.dart';
 
 typedef EitherUser<T> = Future<Either<String, T>>;
 
 abstract class BaseAuthRepository {
-  EitherUser<User> googleSignInUser();
+  EitherUser<String> googleSignInUser();
+  EitherUser<User> emailPasswordSignIn(String email, String password);
   EitherUser<String> signOutUser();
 }

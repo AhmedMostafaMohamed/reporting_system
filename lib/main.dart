@@ -1,18 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:reporting_system/data/models/report.dart';
-import 'package:reporting_system/data/repos/report/report_repository.dart';
+import 'package:reporting_system/data/repos/authentication/offline_authentication_repository.dart';
+import 'package:reporting_system/data/repos/report/offline_report_repository.dart';
 import 'package:reporting_system/domain/blocs/report/report_bloc.dart';
 import 'package:reporting_system/modules/home/home.dart';
 import 'package:reporting_system/modules/report%20screen/report_screen.dart';
-import 'data/repos/authentication/authentication_repository.dart';
 import 'domain/blocs/auth/auth_bloc.dart';
 import 'modules/auth/auth_page.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,14 +40,16 @@ void main() async {
         messagingSenderId: authProjectConfig['messagingSenderId'],
         appId: authProjectConfig['appId']),
   );
-  runApp(const MyApp());
+  final String? token = await const FlutterSecureStorage().read(key: 'token');
+  runApp( MyApp(token: token,));
 }
 
 Future<String> getConfigForFirebase() async =>
    await rootBundle.loadString('assets/config/firebase_config.json');
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? token;
+  const MyApp({super.key,this.token});
 
   @override
   Widget build(BuildContext context) {
@@ -55,21 +57,17 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => ReportBloc(
-              reportRepository: ReportRepository(
-                  firebaseFirestore: FirebaseFirestore.instanceFor(
-                      app: Firebase.app('data')))),
+              reportRepository: OfflineReportRepository()),
         ),
         BlocProvider(
           create: (context) => AuthBloc(
-            authRepository: AuthRepository(
-                googleSignIn: GoogleSignIn(),
-                firebaseFirestore:
-                    FirebaseFirestore.instanceFor(app: Firebase.app('auth'))),
+            authRepository: OfflineAuthRepository(secureStorage: const FlutterSecureStorage()),
           ),
         )
       ],
       child: MaterialApp(
         title: 'Reporting app',
+        initialRoute: buildInitialRoute(token),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -77,7 +75,7 @@ class MyApp extends StatelessWidget {
         ),
         onGenerateRoute: (settings) {
           switch (settings.name) {
-            case '/':
+            case '/auth':
               return MaterialPageRoute(builder: (context) => const AuthPage());
             case '/home':
               return MaterialPageRoute(builder: (context) => HomePage());
@@ -93,4 +91,9 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+      String buildInitialRoute(String? token) => token == null
+      ? '/auth'
+      : !JwtDecoder.isExpired(token)
+          ? '/home'
+          : '/auth';
 }

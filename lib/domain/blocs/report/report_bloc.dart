@@ -3,19 +3,20 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:reporting_system/data/models/report.dart';
-import 'package:reporting_system/data/repos/report/report_repository.dart';
+import 'package:reporting_system/data/repos/report/base_report_repository.dart';
+
 
 part 'report_event.dart';
 part 'report_state.dart';
 
 class ReportBloc extends Bloc<ReportEvent, ReportState> {
-  final ReportRepository _reportRepository;
-  ReportBloc({required ReportRepository reportRepository})
+  final BaseReportRepository _reportRepository;
+  ReportBloc({required BaseReportRepository reportRepository})
       : _reportRepository = reportRepository,
         super(ReportInitial()) {
     on<FetchReportsEvent>(_onFetchReportsEvent);
-    on<AddReportEvent>(_onAddUserEvent);
-    on<DeleteReportEvent>(_onDeleteUserEvent);
+    on<AddReportEvent>(_onAddReportEvent);
+    on<DeleteReportEvent>(_onDeleteReportEvent);
   }
 
   FutureOr<void> _onFetchReportsEvent(
@@ -31,7 +32,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     }
   }
 
-  FutureOr<void> _onAddUserEvent(
+  FutureOr<void> _onAddReportEvent(
       AddReportEvent event, Emitter<ReportState> emit) async {
     try {
       emit(LoadingState());
@@ -41,11 +42,11 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
           (user) => emit(ReportAddedState()));
       add(FetchReportsEvent());
     } catch (e) {
-      emit(ErrorState(errorMessage: 'Error adding user: $e'));
+      emit(ErrorState(errorMessage: 'Error adding report: $e'));
     }
   }
 
-  FutureOr<void> _onDeleteUserEvent(
+  FutureOr<void> _onDeleteReportEvent(
       DeleteReportEvent event, Emitter<ReportState> emit) async {
     try {
       emit(LoadingState());
@@ -55,7 +56,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
           (user) => emit(ReportDeletedState()));
       add(FetchReportsEvent());
     } catch (e) {
-      emit(ErrorState(errorMessage: 'Error delteing user: $e'));
+      emit(ErrorState(errorMessage: 'Error delteing report: $e'));
     }
   }
 }

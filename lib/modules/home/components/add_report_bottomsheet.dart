@@ -36,10 +36,10 @@ class AddReportBottomSheet extends StatelessWidget {
                 if (value!.isEmpty) {
                   return 'Please enter a report URL';
                 }
-                if (!value.startsWith(
-                    'https://lookerstudio.google.com/embed/reporting/')) {
-                  return 'URL must start with "https://lookerstudio.google.com/embed/reporting/"';
-                }
+                // if (!value.startsWith(
+                //     'https://lookerstudio.google.com/embed/reporting/')) {
+                //   return 'URL must start with "https://lookerstudio.google.com/embed/reporting/"';
+                // }
                 return null;
               },
               decoration: const InputDecoration(labelText: 'Report URL'),
